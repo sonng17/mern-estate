@@ -1,7 +1,8 @@
+import { errorHandler } from "../error.js";
 import User from "../models/user.model.js";
 import brcyptjs from "bcryptjs";
 
-export const signup = async (req, res) => {
+export const signup = async (req, res, next) => {
   console.log(req.body);
   const { username, email, password } = req.body;
   const hashedPassword = brcyptjs.hashSync(password, 10);
@@ -11,6 +12,7 @@ export const signup = async (req, res) => {
     await newUser.save();
     res.status(201).json("User created successfully!");
   } catch (error) {
-    res.status(500).json(error.message);
+    //next(errorHandler(550, "error from the function"));//some cases se dung den error manual
+    next(error);
   }
 };
