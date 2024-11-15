@@ -15,17 +15,18 @@ mongoose
   });
 
 const app = express();
-app.use(express.json()); //cho phep json as input khi dung post de gui request, default thi server k cho phep nhan json
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
 
+app.use(express.json()); //cho phep json as input khi dung post de gui request, default thi server k cho phep nhan json
+
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 
-//create middleware de xu ly cac request
-// middleware de handle loi
+//create middleware to handle request: normal middleware, handling error middleware (middlewares in expressjs)
+//handling error middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
   const message = err.message || "Internal Server Error";
