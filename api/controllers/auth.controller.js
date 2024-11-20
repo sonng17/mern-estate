@@ -1,7 +1,8 @@
-import { errorHandler } from "../error.js";
+import { errorHandler } from "../utils/error.js";
 import User from "../models/user.model.js";
 import brcyptjs from "bcryptjs";
 
+//Create controller for router
 export const signup = async (req, res, next) => {
   console.log(req.body);
   const { username, email, password } = req.body;
@@ -15,4 +16,4 @@ export const signup = async (req, res, next) => {
     //next(errorHandler(550, "error from the function"));//some cases se dung den error manual
     next(error);
   }
-};
+}; //
