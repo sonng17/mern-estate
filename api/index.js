@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
+import cookieParser from 'cookie-parser';
 
 //Connect db, config .env
 dotenv.config(); //config env
@@ -24,6 +25,7 @@ app.listen(3000, () => {
 
 //Create middleware to handle request: normal middleware, handling error middleware
 app.use(express.json()); //Auto phải có, để client gửi json as input khi dung post,get,... khi gui request, default server k cho phep nhan json
+app.use(cookieParser());
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 //-handling error middleware
