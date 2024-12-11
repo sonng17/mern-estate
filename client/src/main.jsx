@@ -18,6 +18,7 @@ import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
 import Listing from './pages/Listing';
+import Search from "./pages/Search.jsx";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -29,6 +30,7 @@ createRoot(document.getElementById("root")).render(
           <Route path="/sign-in" element={<SignIn />}></Route>
           <Route path="/sign-up" element={<SignUp />}></Route>
           <Route path="/about" element={<About />}></Route>
+          <Route path='/search' element={<Search />} />
           <Route path='/listing/:listingId' element={<Listing />} />
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />}></Route>
