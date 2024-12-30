@@ -12,8 +12,8 @@ export default function SignIn() {
   // const [error, setError] = useState(null);
   // const [loading, setLoading] = useState(false);
   const { loading, error } = useSelector((state) => state.user);
-  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
