@@ -46,6 +46,7 @@ export default function Header() {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
+        
         <ul className="flex gap-4 ">
           <Link to="/">
             <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
