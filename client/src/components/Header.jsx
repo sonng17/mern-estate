@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -46,7 +46,7 @@ export default function Header() {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
-        
+
         <ul className="flex gap-4 ">
           <Link to="/">
             <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
@@ -59,7 +59,21 @@ export default function Header() {
             </li>
           </Link>
 
-          <Link to="/profile">
+          {currentUser && (
+            <Link to={`/profile/${currentUser._id}`}>
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+                Profile
+              </li>
+            </Link>
+          )}
+
+          {currentUser && (
+            <div className="flex items-center justify-center w-5 h-6 hover:bg-slate-300 rounded-md">
+              <FaBell className="text-slate-500" />
+            </div>
+          )}
+
+          <Link to="/settings">
             {currentUser ? (
               <img
                 className="rounded-full h-7 w-7 object-cover"

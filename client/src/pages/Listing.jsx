@@ -44,6 +44,7 @@ export default function Listing() {
       } catch (error) {
         setError(true);
         setLoading(false);
+        console.log(error);
       }
     };
     fetchListing();

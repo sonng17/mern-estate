@@ -8,7 +8,6 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import SignIn from "./pages/SignIn";
-import Profile from "./pages/Profile";
 import SignUp from "./pages/SignUp";
 import About from "./pages/About";
 import Header from "./components/Header.jsx";
@@ -17,8 +16,10 @@ import { PersistGate } from "redux-persist/integration/react";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreateListing from "./pages/CreateListing";
 import UpdateListing from "./pages/UpdateListing";
-import Listing from './pages/Listing';
+import Listing from "./pages/Listing";
 import Search from "./pages/Search.jsx";
+import Settings from "./pages/Settings.jsx";
+import Profile from "./pages/Profile.jsx";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -30,10 +31,11 @@ createRoot(document.getElementById("root")).render(
           <Route path="/sign-in" element={<SignIn />}></Route>
           <Route path="/sign-up" element={<SignUp />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path='/search' element={<Search />} />
-          <Route path='/listing/:listingId' element={<Listing />} />
+          <Route path="/profile/:userId" element={<Profile />}></Route>
+          <Route path="/search" element={<Search />} />
+          <Route path="/listing/:listingId" element={<Listing />} />
           <Route element={<PrivateRoute />}>
-            <Route path="/profile" element={<Profile />}></Route>
+            <Route path="/settings" element={<Settings />}></Route>
             <Route path="/create-listing" element={<CreateListing />} />
             <Route
               path="/update-listing/:listingId"
