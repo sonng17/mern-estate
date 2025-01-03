@@ -1,10 +1,8 @@
-import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
 import { Link, useParams } from "react-router-dom";
 
 export default function Profile() {
-  const { currentUser } = useSelector((state) => state.user);
   const [userProfile, setUserProfile] = useState(null);
   const [userListings, setUserListings] = useState([]);
   const params = useParams();
@@ -86,9 +84,12 @@ export default function Profile() {
         <p>Loading profile details...</p>
       )}
 
-      <h1 className=" mt-7 text-2xl font-semibold mb-2 border-t-2 border-slate-500">
-        {currentUser.username} Listings
-      </h1>
+      {userProfile && (
+        <h1 className=" mt-7 text-2xl font-semibold mb-2 border-t-2 border-slate-500">
+          {userProfile.username} Listings
+        </h1>
+      )}
+
       {userListings.length > 0 ? (
         <div className="flex flex-col gap-4">
           {userListings.map((listing) => (
