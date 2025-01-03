@@ -27,7 +27,7 @@ export default function Header() {
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
             <span className="text-slate-500">Hanoi</span>
-            <span className="text-slate-700">Estate</span>
+            <span className="text-slate-700">Apartment</span>
           </h1>
         </Link>
 
@@ -48,10 +48,14 @@ export default function Header() {
         </form>
         <ul className="flex gap-4 ">
           <Link to="/">
-            <li className="sm:inline text-slate-700 hover:underline">Home</li>
+            <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+              Home
+            </li>
           </Link>
           <Link to="/about">
-            <li className="sm:inline text-slate-700 hover:underline">About</li>
+            <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+              About
+            </li>
           </Link>
 
           <Link to="/profile">
@@ -62,7 +66,7 @@ export default function Header() {
                 alt="profile"
               />
             ) : (
-              <li className="sm:inline text-slate-700 hover:underline">
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
                 Sign in
               </li>
             )}
