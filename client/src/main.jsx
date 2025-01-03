@@ -20,6 +20,7 @@ import Listing from "./pages/Listing";
 import Search from "./pages/Search.jsx";
 import Settings from "./pages/Settings.jsx";
 import Profile from "./pages/Profile.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
@@ -42,6 +43,7 @@ createRoot(document.getElementById("root")).render(
               element={<UpdateListing />}
             />
           </Route>
+          <Route path="/*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>
