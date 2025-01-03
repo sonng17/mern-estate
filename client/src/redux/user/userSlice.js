@@ -1,5 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+//Redux
+/*
+- Config
++ Store nơi chứa các reducers, reducers quản lý state + action
++ Slice để tạo reducers(hàm lấy state + action làm tham số)
+
+- Ứng dụng: dùng useSelector(state => state.user) để lấy state, dispatch(action) để thay đổi state
+*/
+
 const initialState = {
   currentUser: null,
   error: null,
@@ -7,7 +16,7 @@ const initialState = {
 };
 
 const userSlice = createSlice({
-  name: "user",
+  name: "user123",
   initialState,
   reducers: {
     signInStart: (state) => {
