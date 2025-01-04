@@ -164,7 +164,9 @@ export default function Settings() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center text-slate-700 my-7">Settings</h1>
+      <h1 className="text-3xl font-semibold text-center text-slate-700 my-7">
+        Settings
+      </h1>
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <input
           onChange={(e) => setFile(e.target.files[0])}
@@ -197,6 +199,22 @@ export default function Settings() {
           placeholder="username"
           defaultValue={currentUser.username}
           id="username"
+          className="border p-3 rounded-lg"
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          placeholder="bio"
+          defaultValue={currentUser.bio}
+          id="bio"
+          className="border p-3 rounded-lg"
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          placeholder="phone"
+          defaultValue={currentUser.phone}
+          id="phone"
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
