@@ -53,6 +53,11 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "expired", "archived"],
+      default: "pending",
+    },
   },
   { timestamps: true }
 );

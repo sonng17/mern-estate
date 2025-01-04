@@ -21,6 +21,7 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
@@ -63,6 +64,14 @@ export default function Header() {
             <Link to={`/profile/${currentUser._id}`}>
               <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
                 Profile
+              </li>
+            </Link>
+          )}
+
+          {currentUser && currentUser.role === "admin" && (
+            <Link to={`/admin`}>
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+                Quản lý
               </li>
             </Link>
           )}
