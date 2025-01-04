@@ -194,6 +194,7 @@ export default function Settings() {
             ""
           )}
         </p>
+        <h1 className="font-bold border-t-2 pt-4 text-slate-500">Username</h1>
         <input
           type="text"
           placeholder="username"
@@ -202,6 +203,8 @@ export default function Settings() {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
+        <h1 className="font-bold text-slate-500">Bio</h1>
+
         <input
           type="text"
           placeholder="bio"
@@ -210,6 +213,8 @@ export default function Settings() {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
+        <h1 className="font-bold text-slate-500">Số điện thoại</h1>
+
         <input
           type="text"
           placeholder="phone"
@@ -218,6 +223,8 @@ export default function Settings() {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
+        <h1 className="font-bold text-slate-500">Email</h1>
+
         <input
           type="email"
           placeholder="email"
@@ -226,11 +233,13 @@ export default function Settings() {
           className="border p-3 rounded-lg"
           onChange={handleChange}
         />
+        <h1 className="font-bold text-slate-500">Password</h1>
+
         <input
           type="password"
           placeholder="password"
           id="password"
-          className="border p-3 rounded-lg"
+          className="border p-3 pb-4 mb-4 rounded-lg"
           onChange={handleChange}
         />
         <button
