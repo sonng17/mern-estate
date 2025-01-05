@@ -56,7 +56,7 @@ const listingSchema = new mongoose.Schema(
     status: {
       type: String,
       enum: ["pending", "approved", "rejected", "expired", "archived"],
-      default: "pending",
+      default: "approved",
     },
   },
   { timestamps: true }

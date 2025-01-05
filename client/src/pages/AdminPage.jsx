@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Tabs, Table, Button, message } from "antd";
-import { useNavigate } from "react-router-dom";
 
 export default function AdminPage() {
   const { currentUser } = useSelector((state) => state.user);
@@ -17,6 +16,22 @@ export default function AdminPage() {
         if (res.ok) {
           const data = await res.json();
           setUsers(data);
+        } else {
+          const data = await res.json();
+          console.log(data.message);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    // Fetch Users
+    const fetchListings = async () => {
+      try {
+        const res = await fetch("/api/admin/getAllListings");
+        if (res.ok) {
+          const data = await res.json();
+          setListings(data);
         } else {
           const data = await res.json();
           console.log(data.message);
@@ -43,6 +58,7 @@ export default function AdminPage() {
     };
 
     fetchUsers();
+    fetchListings();
     fetchPendingListings();
   }, [currentUser]);
 
@@ -55,7 +71,7 @@ export default function AdminPage() {
   // Handle Delete User
   const handleDeleteUser = async (id) => {
     try {
-      const res = await fetch(`/api/admin/delete/${id}`, {
+      const res = await fetch(`/api/admin/deleteUser/${id}`, {
         method: "DELETE",
       });
       if (res.ok) {
@@ -134,12 +150,87 @@ export default function AdminPage() {
   };
 
   //Listings tab-----------------
+  // Handle Get Listing
+  const handleGetListing = (id) => {
+    window.open(`/listing/${id}`, "_blank");
+  };
+  // Handle Delete Listing
+  const handleDeleteListing = async (id) => {
+    try {
+      const res = await fetch(`/api/admin/deleteListing/${id}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        message.success("Listing deleted successfully");
+        setListings(listings.filter((listing) => listing._id !== id)); // Cập nhật danh sách listing sau khi xóa
+      } else {
+        const data = await res.json();
+        message.error(data.message || "Failed to delete listing");
+      }
+    } catch (error) {
+      message.error("An error occurred while deleting the listing");
+      console.log(error);
+    }
+  };
+
+  // Cấu hình các cột của bảng Listing
+  const listingColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
+      title: "UserRef",
+      dataIndex: "userRef",
+      key: "userRef",
+    },
+    {
+      title: "status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <div className="flex gap-2">
+          <Button type="primary" onClick={() => handleGetListing(record._id)}>
+            Get
+          </Button>
+          <Button type="default">Update</Button>
+          <Button
+            type="primary"
+            danger
+            onClick={() => handleDeleteListing(record._id)}
+          >
+            Delete
+          </Button>
+        </div>
+      ),
+    },
+  ];
   // Render bảng danh sách Listing
   const renderListingsTable = () => {
     return (
       <Table
-        dataSource={users}
-        columns={userColumns}
+        dataSource={listings}
+        columns={listingColumns}
         rowKey={(record) => record._id} // Dùng _id làm key cho từng hàng
         pagination={{ pageSize: 5 }}
       />
