@@ -28,31 +28,36 @@ createRoot(document.getElementById("root")).render(
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
       <BrowserRouter>
-        <Header />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/sign-in" element={<SignIn />}></Route>
-          <Route path="/sign-up" element={<SignUp />}></Route>
-          <Route path="/about" element={<About />}></Route>
-          <Route path="/profile/:userId" element={<Profile />}></Route>
-          <Route path="/search" element={<Search />} />
-          <Route path="/listing/:listingId" element={<Listing />} />
-          <Route element={<PrivateRoute />}>
-            <Route path="/settings" element={<Settings />}></Route>
-            <Route path="/create-listing" element={<CreateListing />} />
-            <Route
-              path="/update-listing/:listingId"
-              element={<UpdateListing />}
-            />
-          </Route>
-          
-          <Route element={<AdminRoute />}>
-            <Route path="/admin" element={<AdminPage />} />
-          </Route>
-          
-          <Route path="/*" element={<NotFound />} />
-        </Routes>
-        <Footer />
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <div className="flex-1">
+            <Routes>
+              <Route path="/" element={<Home />}></Route>
+              <Route path="/sign-in" element={<SignIn />}></Route>
+              <Route path="/sign-up" element={<SignUp />}></Route>
+              <Route path="/about" element={<About />}></Route>
+              <Route path="/profile/:userId" element={<Profile />}></Route>
+              <Route path="/search" element={<Search />} />
+              <Route path="/listing/:listingId" element={<Listing />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/settings" element={<Settings />}></Route>
+                <Route path="/create-listing" element={<CreateListing />} />
+                <Route
+                  path="/update-listing/:listingId"
+                  element={<UpdateListing />}
+                />
+              </Route>
+
+              <Route element={<AdminRoute />}>
+                <Route path="/admin" element={<AdminPage />} />
+              </Route>
+
+              <Route path="/*" element={<NotFound />} />
+            </Routes>
+          </div>
+
+          <Footer />
+        </div>
       </BrowserRouter>
     </PersistGate>
   </Provider>

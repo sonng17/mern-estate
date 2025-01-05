@@ -40,7 +40,7 @@ export const updateUser = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res, next) => {
-  if (req.user.id !== req.params.id)
+  if (req.user.id !== req.params.id && req.user.role !== "admin")
     return next(errorHandler(401, "You can only delete your own account!"));
   try {
     await User.findByIdAndDelete(req.params.id);
@@ -77,5 +77,3 @@ export const getUser = async (req, res, next) => {
     next(error);
   }
 };
-
-
