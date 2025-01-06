@@ -22,6 +22,29 @@ const userSchema = new mongoose.Schema(
       default:
         "https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/11/24/chill-guy-ttc-1732421724981667208220.jpg",
     },
+    bio: {
+      type: String,
+      default: "Chưa có bio",
+    },
+    phone: {
+      type: String,
+      unique: true,
+      default: "Hiện chưa có SĐT",
+    },
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+    status: {
+      type: String,
+      enum: ["active", "deactive"],
+      default: "active",
+    },
+    isOnline: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 ); //

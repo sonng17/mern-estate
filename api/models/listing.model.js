@@ -53,6 +53,19 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    districtRef: {
+      type: String,
+      required: true,
+    },
+    favoriteUserList: {
+      type: Array,
+      required: true,
+    },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected", "expired", "archived"],
+      default: "approved",
+    },
   },
   { timestamps: true }
 );

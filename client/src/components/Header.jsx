@@ -1,4 +1,4 @@
-import { FaSearch } from "react-icons/fa";
+import { FaSearch, FaBell } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
@@ -21,13 +21,14 @@ export default function Header() {
       setSearchTerm(searchTermFromUrl);
     }
   }, [location.search]);
+
   return (
     <header className="bg-slate-200 shadow-md">
       <div className="flex justify-between items-center max-w-6xl mx-auto p-3">
         <Link to="/">
           <h1 className="font-bold text-sm sm:text-xl flex flex-wrap">
             <span className="text-slate-500">Hanoi</span>
-            <span className="text-slate-700">Estate</span>
+            <span className="text-slate-700">Apartment</span>
           </h1>
         </Link>
 
@@ -46,15 +47,42 @@ export default function Header() {
             <FaSearch className="text-slate-600" />
           </button>
         </form>
+
         <ul className="flex gap-4 ">
           <Link to="/">
-            <li className="sm:inline text-slate-700 hover:underline">Home</li>
+            <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+              Home
+            </li>
           </Link>
           <Link to="/about">
-            <li className="sm:inline text-slate-700 hover:underline">About</li>
+            <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+              About
+            </li>
           </Link>
 
-          <Link to="/profile">
+          {currentUser && (
+            <Link to={`/profile/${currentUser._id}`}>
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+                Profile
+              </li>
+            </Link>
+          )}
+
+          {currentUser && currentUser.role === "admin" && (
+            <Link to={`/admin`}>
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
+                Quản lý
+              </li>
+            </Link>
+          )}
+
+          {currentUser && (
+            <div className="flex items-center justify-center w-5 h-6 hover:bg-slate-300 rounded-md">
+              <FaBell className="text-slate-500" />
+            </div>
+          )}
+
+          <Link to="/settings">
             {currentUser ? (
               <img
                 className="rounded-full h-7 w-7 object-cover"
@@ -62,7 +90,7 @@ export default function Header() {
                 alt="profile"
               />
             ) : (
-              <li className="sm:inline text-slate-700 hover:underline">
+              <li className="sm:inline font-bold text-slate-500 p-2 no-underline hover:font-bold hover:bg-slate-300 rounded-md">
                 Sign in
               </li>
             )}

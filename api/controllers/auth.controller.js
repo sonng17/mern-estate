@@ -40,7 +40,10 @@ export const signin = async (req, res, next) => {
     //Kiến thức: tạo một token JWT với các dữ liệu user cần mã hóa->Gửi token đó qua cookie để lưu trên trình duyệt người dùng.->Token được sử dụng trong các lần yêu cầu tiếp theo để xác minh user, k yêu cầu đnhap lại
     //Kiến thức: JWT Token là chuỗi xác thực người dùng được lưu trong cookies web để dùng trong các request tiếp theo mà k cần tra lại db
     //const token = jwt.sign(payload, secretKey, options); Tạo token với payload: dữ liệu user cần thiết dc sdung để mã hóa; secretkey: server tự tạo và chỉ server biết; options: dữ liệu thêm cho payload
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign(
+      { id: validUser._id, role: validUser.role },
+      process.env.JWT_SECRET
+    );
     const { password: pass, ...rest } = validUser._doc;
     res
       .cookie("access_token", token, { httpOnly: true }) //Lưu vào cookies với trường access_token: token và các tùy chọn bảo mật
@@ -100,8 +103,8 @@ export const google = async (req, res, next) => {
 
 export const signOut = async (req, res, next) => {
   try {
-    res.clearCookie('access_token');
-    res.status(200).json('User has been logged out!');
+    res.clearCookie("access_token");
+    res.status(200).json("User has been logged out!");
   } catch (error) {
     next(error);
   }
