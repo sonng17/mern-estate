@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
-import { Link, useParams } from "react-router-dom";
+import { Link, Navigate, useParams } from "react-router-dom";
 
 export default function Profile() {
+  const { currentUser } = useSelector((state) => state.user);
   const [userProfile, setUserProfile] = useState(null);
   const [userListings, setUserListings] = useState([]);
   const params = useParams();
@@ -41,6 +43,7 @@ export default function Profile() {
 
   return (
     <div className="p-3 max-w-lg mx-auto">
+      {!currentUser && <Navigate to={"/sign-in"}></Navigate>}
       <h1 className="text-3xl font-semibold text-center text-slate-700 my-7">
         Profile
       </h1>
