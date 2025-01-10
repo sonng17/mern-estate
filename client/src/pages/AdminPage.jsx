@@ -279,7 +279,7 @@ export default function AdminPage() {
           <h1 className="text-3xl font-semibold text-center text-slate-700 my-7">
             Admin Dashboard
           </h1>
-          <Tabs defaultActiveKey="1" items={items} />
+          <Tabs className="border-t-2 border-black m-5" defaultActiveKey="1" items={items} />
         </div>
       )}
     </div>
