@@ -33,7 +33,8 @@ export default function Listing() {
         setLoading(true);
         const res = await fetch(`/api/listing/get/${params.listingId}`);
         const data = await res.json();
-        if (data.success === false) {
+        console.log(data, "data nè");
+        if (data === "not allow") {
           setError(true);
           setLoading(false);
           return;
@@ -69,7 +70,7 @@ export default function Listing() {
     fetchUserProfile();
   }, [listing]);
 
-  console.log(listing);
+  console.log(error);
   console.log(userProfile);
 
   return (

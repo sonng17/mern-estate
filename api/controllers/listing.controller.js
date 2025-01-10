@@ -57,7 +57,15 @@ export const getListing = async (req, res, next) => {
       return next(errorHandler(404, "Listing not found!"));
     }
     // Nếu status là "approved", trả về listing
-    return res.status(200).json(listing);
+    if (listing.status === "approved") {
+      return res.status(200).json(listing);
+    } else {
+      if (listing.userRef !== req.user.id && req.user.role !== "admin") {
+        return res.status(403).json("not allow");
+      } else {
+        return res.status(200).json(listing);
+      }
+    }
   } catch (error) {
     // Xử lý lỗi khác
     next(error);
