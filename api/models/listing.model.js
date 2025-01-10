@@ -55,11 +55,9 @@ const listingSchema = new mongoose.Schema(
     },
     districtRef: {
       type: String,
-      required: true,
     },
     favoriteUserList: {
       type: Array,
-      required: true,
     },
     status: {
       type: String,
