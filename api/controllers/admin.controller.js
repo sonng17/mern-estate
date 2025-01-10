@@ -9,7 +9,7 @@ export const getAllUsers = async (req, res) => {
     const users = await User.find();
     res.status(200).json(users);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -18,7 +18,7 @@ export const getAllListings = async (req, res) => {
     const listings = await Listing.find();
     res.status(200).json(listings);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -27,7 +27,7 @@ export const getPendingListings = async (req, res) => {
     const listings = await Listing.find({ status: "pending" });
     res.status(200).json(listings);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
   }
 };
 
@@ -39,9 +39,37 @@ export const approveListing = async (req, res) => {
       { status: "approved" },
       { new: true }
     );
-    res.status(200).json(listing);
+    res.status(200).json("Approve success!");
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    next(error);
+  }
+};
+
+export const rejectListing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const listing = await Listing.findByIdAndUpdate(
+      id,
+      { status: "rejected" },
+      { new: true }
+    );
+    res.status(200).json("Reject success!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const pendListing = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const listing = await Listing.findByIdAndUpdate(
+      id,
+      { status: "pending" },
+      { new: true }
+    );
+    res.status(200).json("Pend success!");
+  } catch (error) {
+    next(error);
   }
 };
 

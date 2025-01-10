@@ -8,59 +8,77 @@ export default function AdminPage() {
   const [listings, setListings] = useState([]);
   const [pendingListings, setPendingListings] = useState([]);
 
+  const fetchUsers = async () => {
+    try {
+      const res = await fetch("/api/admin/getAllUsers");
+      if (res.ok) {
+        const data = await res.json();
+        setUsers(data);
+      } else {
+        const data = await res.json();
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Fetch Listings
+  const fetchListings = async () => {
+    try {
+      const res = await fetch("/api/admin/getAllListings");
+      if (res.ok) {
+        const data = await res.json();
+        const listingsWithUsername = data.map((listing) => ({
+          ...listing,
+          userRef:
+            users.find((user) => user._id === listing.userRef)?.username ||
+            "Unknown",
+        }));
+        setListings(listingsWithUsername);
+      } else {
+        const data = await res.json();
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // Fetch Pending Listings
+  const fetchPendingListings = async () => {
+    try {
+      const res = await fetch("/api/admin/getPendingListings");
+      if (res.ok) {
+        const data = await res.json();
+        const pendingListingsWithUsername = data.map((listing) => ({
+          ...listing,
+          userRef:
+            users.find((user) => user._id === listing.userRef)?.username ||
+            "Unknown",
+        }));
+        setPendingListings(pendingListingsWithUsername);
+      } else {
+        const data = await res.json();
+        console.log(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     // Fetch Users
-    const fetchUsers = async () => {
-      try {
-        const res = await fetch("/api/admin/getAllUsers");
-        if (res.ok) {
-          const data = await res.json();
-          setUsers(data);
-        } else {
-          const data = await res.json();
-          console.log(data.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    // Fetch Users
-    const fetchListings = async () => {
-      try {
-        const res = await fetch("/api/admin/getAllListings");
-        if (res.ok) {
-          const data = await res.json();
-          setListings(data);
-        } else {
-          const data = await res.json();
-          console.log(data.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    // Fetch Pending Listings
-    const fetchPendingListings = async () => {
-      try {
-        const res = await fetch("/api/admin/getPendingListings");
-        if (res.ok) {
-          const data = await res.json();
-          setPendingListings(data);
-        } else {
-          const data = await res.json();
-          console.log(data.message);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
     fetchUsers();
-    fetchListings();
-    fetchPendingListings();
-  }, [currentUser]);
+  }, [currentUser, users, listings, pendingListings]);
+
+  useEffect(() => {
+    // Gọi fetchListings và fetchPendingListings sau khi users được cập nhật
+    if (users.length > 0) {
+      fetchListings();
+      fetchPendingListings();
+    }
+  }, [currentUser, users, listings, pendingListings]);
 
   //User tab-----------------
   // Handle Get User
@@ -124,7 +142,12 @@ export default function AdminPage() {
           <Button type="primary" onClick={() => handleGetUser(record._id)}>
             Get
           </Button>
-          <Button type="default">Update</Button>
+          <Button
+            type="default"
+            className="bg-yellow-300 hover:bg-yellow-600! text-black"
+          >
+            Update
+          </Button>
           <Button
             type="primary"
             danger
@@ -173,6 +196,73 @@ export default function AdminPage() {
     }
   };
 
+  // Handle Set Listing Status
+  const handlePendListing = async (id, status) => {
+    try {
+      const res = await fetch(`/api/admin/pendListing/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        message.success(`Listing status updated to ${status}`);
+        setListings(
+          listings.map((listing) =>
+            listing._id === id ? { ...listing, status } : listing
+          )
+        );
+      } else {
+        const data = await res.json();
+        message.error(data.message || "Failed to update listing status");
+      }
+    } catch (error) {
+      message.error("An error occurred while updating the listing status");
+      console.log(error);
+    }
+  };
+
+  const handleApproveListing = async (id) => {
+    try {
+      const res = await fetch(`/api/admin/approveListing/${id}`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        message.success("Listing approved successfully");
+        setPendingListings(
+          pendingListings.filter((listing) => listing._id !== id)
+        );
+      } else {
+        const data = await res.json();
+        message.error(data.message || "Failed to approve listing");
+      }
+    } catch (error) {
+      message.error("An error occurred while approving the listing");
+      console.log(error);
+    }
+  };
+
+  const handleRejectListing = async (id) => {
+    try {
+      const res = await fetch(`/api/admin/rejectListing/${id}`, {
+        method: "PUT",
+      });
+      if (res.ok) {
+        message.success("Listing rejected successfully");
+        setPendingListings(
+          pendingListings.filter((listing) => listing._id !== id)
+        );
+      } else {
+        const data = await res.json();
+        message.error(data.message || "Failed to reject listing");
+      }
+    } catch (error) {
+      message.error("An error occurred while rejecting the listing");
+      console.log(error);
+    }
+  };
+
   // Cấu hình các cột của bảng Listing
   const listingColumns = [
     {
@@ -196,12 +286,12 @@ export default function AdminPage() {
       key: "type",
     },
     {
-      title: "UserRef",
+      title: "Username",
       dataIndex: "userRef",
       key: "userRef",
     },
     {
-      title: "status",
+      title: "Status",
       dataIndex: "status",
       key: "status",
     },
@@ -209,18 +299,45 @@ export default function AdminPage() {
       title: "Actions",
       key: "actions",
       render: (text, record) => (
-        <div className="flex gap-2">
-          <Button type="primary" onClick={() => handleGetListing(record._id)}>
-            Get
-          </Button>
-          <Button type="default">Update</Button>
-          <Button
-            type="primary"
-            danger
-            onClick={() => handleDeleteListing(record._id)}
-          >
-            Delete
-          </Button>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-2">
+            <Button type="primary" onClick={() => handleGetListing(record._id)}>
+              Get
+            </Button>
+            <Button
+              type="default"
+              className="bg-yellow-300 hover:bg-yellow-600! text-black"
+            >
+              Update
+            </Button>
+            <Button
+              type="primary"
+              danger
+              onClick={() => handleDeleteListing(record._id)}
+            >
+              Delete
+            </Button>
+          </div>
+          <div className="flex gap-2">
+            <Button
+              type="default"
+              onClick={() => handlePendListing(record._id, "Pending")}
+            >
+              Set Pending
+            </Button>
+            <Button
+              type="default"
+              onClick={() => handleApproveListing(record._id, "Approved")}
+            >
+              Set Approved
+            </Button>
+            <Button
+              type="default"
+              onClick={() => handleRejectListing(record._id, "Rejected")}
+            >
+              Set Rejected
+            </Button>
+          </div>
         </div>
       ),
     },
@@ -236,7 +353,73 @@ export default function AdminPage() {
       />
     );
   };
+
   //Pending listing tab-----------------
+
+  const pendingListingColumns = [
+    {
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
+    },
+    {
+      title: "Description",
+      dataIndex: "description",
+      key: "description",
+    },
+    {
+      title: "Address",
+      dataIndex: "address",
+      key: "address",
+    },
+    {
+      title: "Type",
+      dataIndex: "type",
+      key: "type",
+    },
+    {
+      title: "Username",
+      dataIndex: "userRef",
+      key: "userRef",
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+    },
+    {
+      title: "Actions",
+      key: "actions",
+      render: (text, record) => (
+        <div className="flex gap-2">
+          <Button
+            type="primary"
+            onClick={() => handleApproveListing(record._id)}
+          >
+            Approve
+          </Button>
+          <Button
+            type="primary"
+            danger
+            onClick={() => handleRejectListing(record._id)}
+          >
+            Reject
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
+  const renderPendingListingsTable = () => {
+    return (
+      <Table
+        dataSource={pendingListings}
+        columns={pendingListingColumns}
+        rowKey={(record) => record._id}
+        pagination={{ pageSize: 5 }}
+      />
+    );
+  };
 
   // Cấu hình các tab
   const items = [
@@ -253,22 +436,7 @@ export default function AdminPage() {
     {
       key: "3",
       label: "Pending Listings",
-      children: (
-        <div>
-          {pendingListings.length > 0 ? (
-            <ul>
-              {pendingListings.map((listing) => (
-                <li key={listing._id}>
-                  {listing.name} - {listing.status}
-                  <button>Approve</button>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>No pending listings found.</p>
-          )}
-        </div>
-      ),
+      children: renderPendingListingsTable(),
     },
   ];
 
@@ -279,7 +447,11 @@ export default function AdminPage() {
           <h1 className="text-3xl font-semibold text-center text-slate-700 my-7">
             Admin Dashboard
           </h1>
-          <Tabs className="border-t-2 border-black m-5" defaultActiveKey="1" items={items} />
+          <Tabs
+            className="border-t-2 border-black m-5"
+            defaultActiveKey="1"
+            items={items}
+          />
         </div>
       )}
     </div>

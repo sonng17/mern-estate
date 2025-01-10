@@ -4,6 +4,8 @@ import {
   updateUser,
   getUserListings,
   getUser,
+  getMyUserListings,
+  getMyUserListing,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -14,8 +16,9 @@ const router = express.Router();
 router.get("/get/:id", getUser);
 router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
+router.get("/mylistings/:id", verifyToken, getMyUserListings);
+router.get("/mylisting/:id", verifyToken, getMyUserListing);
 router.get("/listings/:id", getUserListings);
 //Admin Router
-
 
 export default router;

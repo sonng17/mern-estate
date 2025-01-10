@@ -131,7 +131,7 @@ export default function Settings() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/api/user/listings/${currentUser._id}`);
+      const res = await fetch(`/api/user/mylistings/${currentUser._id}`);
       const data = await res.json();
       if (data.success === false) {
         setShowListingsError(true);
@@ -284,7 +284,7 @@ export default function Settings() {
           {userListings.map((listing) => (
             <div
               key={listing._id}
-              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+              className="grid grid-cols-[auto,2fr,auto,auto] gap-4 border rounded-lg p-3 items-center"
             >
               <Link to={`/listing/${listing._id}`}>
                 <img
@@ -294,21 +294,28 @@ export default function Settings() {
                 />
               </Link>
               <Link
-                className="text-slate-700 font-semibold  hover:underline truncate flex-1"
+                className="text-slate-700 font-semibold hover:underline truncate"
                 to={`/listing/${listing._id}`}
               >
                 <p>{listing.name}</p>
               </Link>
-
-              <div className="flex flex-col item-center">
+              <Link
+                className="text-blue-700 font-semibold hover:underline truncate"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.status}</p>
+              </Link>
+              <div className="flex flex-col items-center">
                 <button
                   onClick={() => handleListingDelete(listing._id)}
-                  className="text-red-700 uppercase"
+                  className="text-red-700 uppercase font-bold"
                 >
                   Delete
                 </button>
                 <Link to={`/update-listing/${listing._id}`}>
-                  <button className="text-green-700 uppercase">Edit</button>
+                  <button className="text-green-700 uppercase font-bold">
+                    Edit
+                  </button>
                 </Link>
               </div>
             </div>

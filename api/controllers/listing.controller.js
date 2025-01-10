@@ -48,12 +48,18 @@ export const updateListing = async (req, res, next) => {
 
 export const getListing = async (req, res, next) => {
   try {
-    const listing = await Listing.findById(req.params.id);
+    // Tìm listing theo ID
+    const listing = await Listing.findOne({
+      _id: req.params.id,
+    });
+    // Nếu không tìm thấy listing
     if (!listing) {
       return next(errorHandler(404, "Listing not found!"));
     }
-    res.status(200).json(listing);
+    // Nếu status là "approved", trả về listing
+    return res.status(200).json(listing);
   } catch (error) {
+    // Xử lý lỗi khác
     next(error);
   }
 };
@@ -87,6 +93,7 @@ export const getListings = async (req, res, next) => {
       furnished,
       parking,
       type,
+      status: "approved",
     })
       .sort({ [sort]: order })
       .limit(limit)

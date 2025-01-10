@@ -51,16 +51,82 @@ export const deleteUser = async (req, res, next) => {
   }
 };
 
-export const getUserListings = async (req, res, next) => {
-  if (req.params.id === req.params.id) {
-    try {
-      const listings = await Listing.find({ userRef: req.params.id });
-      res.status(200).json(listings);
-    } catch (error) {
-      next(error);
+export const getMyUserListing = async (req, res, next) => {
+  try {
+    // Tìm listing với id và trạng thái "approved"
+    const listing = await Listing.findOne({
+      _id: req.params.id,
+    });
+
+    // Nếu không tìm thấy, trả về lỗi 404
+    if (!listing) {
+      return next(errorHandler(404, "Listing not found!"));
     }
-  } else {
-    return next();
+
+    // Nếu tìm thấy, trả về dữ liệu
+    res.status(200).json(listing);
+  } catch (error) {
+    // Xử lý lỗi khác
+    next(error);
+  }
+};
+
+export const getMyUserListings = async (req, res, next) => {
+  const userId = req.params.id;
+
+  // Kiểm tra nếu userId không tồn tại
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+
+  try {
+    // Truy vấn danh sách theo userRef và status "approved"
+    const listings = await Listing.find({
+      userRef: userId,
+    });
+
+    // Nếu không có danh sách nào được tìm thấy
+    if (listings.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No listings found for this user." });
+    }
+
+    // Phản hồi với danh sách tìm thấy
+    res.status(200).json(listings);
+  } catch (error) {
+    // Truyền lỗi sang middleware xử lý lỗi
+    next(error);
+  }
+};
+
+export const getUserListings = async (req, res, next) => {
+  const userId = req.params.id;
+
+  // Kiểm tra nếu userId không tồn tại
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+
+  try {
+    // Truy vấn danh sách theo userRef và status "approved"
+    const listings = await Listing.find({
+      userRef: userId,
+      status: "approved",
+    });
+
+    // Nếu không có danh sách nào được tìm thấy
+    if (listings.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No listings found for this user." });
+    }
+
+    // Phản hồi với danh sách tìm thấy
+    res.status(200).json(listings);
+  } catch (error) {
+    // Truyền lỗi sang middleware xử lý lỗi
+    next(error);
   }
 };
 

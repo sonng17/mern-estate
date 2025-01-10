@@ -57,8 +57,7 @@ export default function Home() {
           Hanoi Apartment is the best place to find your next perfect place to
           live.
           <br />
-          We have a wide range of properties for you to choose from. {" "}
-
+          We have a wide range of properties for you to choose from.{" "}
           <Link to={"/search"}>
             <span className="font-bold text-blue-800  hover:underline">
               Get started...
