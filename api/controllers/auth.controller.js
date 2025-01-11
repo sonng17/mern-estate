@@ -49,7 +49,6 @@ export const signin = async (req, res, next) => {
       .cookie("access_token", token, {
         httpOnly: true,
         secure: false,
-        sameSite: "None",
       }) //Lưu vào cookies với trường access_token: token và các tùy chọn bảo mật
       .status(200)
       .json(rest);
