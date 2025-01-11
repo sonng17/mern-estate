@@ -37,9 +37,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"], // Các header được phép
   })
 );
-
-app.use(express.static("public"));
-
 //
 
 //Create middleware to handle request: normal middleware, handling error middleware
