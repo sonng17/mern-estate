@@ -35,6 +35,7 @@ app.use(
     origin: ["http://localhost:5173", "https://mern-estate-web.vercel.app"], // Thay bằng domain của frontend
     methods: ["GET", "POST", "PUT", "DELETE"], // Các method được phép
     allowedHeaders: ["Content-Type", "Authorization"], // Các header được phép
+    credentials: true,
   })
 );
 //
