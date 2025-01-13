@@ -5,7 +5,9 @@ import {
   deleteUser,
   getAllListings,
   getAllUsers,
+  getListingsAdmin,
   getPendingListings,
+  getUsersAdmin,
   pendListing,
   rejectListing,
 } from "../controllers/admin.controller.js";
@@ -16,7 +18,9 @@ const router = express.Router();
 
 //Admin Router
 router.get("/getAllUsers", isAdmin, getAllUsers);
+router.get("/getUsers", isAdmin, getUsersAdmin);
 router.get("/getAllListings", isAdmin, getAllListings);
+router.get("/getListings", isAdmin, getListingsAdmin);
 router.get("/getPendingListings", isAdmin, getPendingListings);
 router.put("/approveListing/:id", isAdmin, approveListing);
 router.put("/rejectListing/:id", isAdmin, rejectListing);
