@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema(
     avatar: {
       type: String,
       default:
-        "https://cdn.tuoitre.vn/thumb_w/480/471584752817336320/2024/11/24/chill-guy-ttc-1732421724981667208220.jpg",
+        "https://greekherald.com.au/wp-content/uploads/2020/07/default-avatar.png",
     },
     bio: {
       type: String,
