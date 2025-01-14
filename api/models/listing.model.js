@@ -53,7 +53,13 @@ const listingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    provinceRef: {
+      type: String,
+    },
     districtRef: {
+      type: String,
+    },
+    wardRef: {
       type: String,
     },
     favoriteUserList: {
