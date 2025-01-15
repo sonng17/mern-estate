@@ -37,7 +37,7 @@ export const updateListing = async (req, res, next) => {
   try {
     // Thêm trường status = 'pending' vào req.body
     req.body.status = "pending";
-    
+
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       req.body,
@@ -102,6 +102,19 @@ export const getListings = async (req, res, next) => {
     const wardRef = req.query.wardRef || "";
     const sort = req.query.sort || "createdAt";
     const order = req.query.order || "desc";
+
+    // Xử lý areaRange
+    const areaRange = req.query.areaRange;
+    let areaFilter = {};
+    if (areaRange) {
+      if (areaRange === "greaterThan200") {
+        areaFilter = { $gt: 200 }; // Lọc diện tích > 200
+      } else {
+        const [minArea, maxArea] = areaRange.split("-").map(Number);
+        areaFilter = { $gte: minArea, $lte: maxArea };
+      }
+    }
+
     const listings = await Listing.find({
       name: { $regex: searchTerm, $options: "i" },
       provinceRef: { $regex: provinceRef, $options: "i" },
@@ -112,6 +125,7 @@ export const getListings = async (req, res, next) => {
       parking,
       type,
       status: "approved",
+      ...(areaRange && { area: areaFilter }),
     })
       .sort({ [sort]: order })
       .limit(limit)
