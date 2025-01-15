@@ -24,20 +24,19 @@ mongoose
 const __dirname = path.resolve();
 
 const app = express();
+// Cấu hình CORS
+app.use(
+  cors({
+    origin: ["http://localhost:5173", "https://mern-estate-web.vercel.app"], // Thay bằng domain của frontend
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000!");
 });
 
-// Cấu hình CORS
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://mern-estate-web.vercel.app"], // Thay bằng domain của frontend
-    methods: ["GET", "POST", "PUT", "DELETE"], // Các method được phép
-    allowedHeaders: ["Content-Type", "Authorization"], // Các header được phép
-    credentials: true,
-  })
-);
 //
 
 //Create middleware to handle request: normal middleware, handling error middleware
