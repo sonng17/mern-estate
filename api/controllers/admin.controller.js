@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import Listing from "../models/listing.model.js";
+import Notification from "../models/notification.model.js";
 
 //Admin controller
 export const getAllUsers = async (req, res) => {
@@ -31,21 +32,43 @@ export const getPendingListings = async (req, res) => {
   }
 };
 
-export const approveListing = async (req, res) => {
+export const approveListing = async (req, res, next) => {
   try {
     const { id } = req.params;
+
+    // Tìm và cập nhật trạng thái bài đăng
     const listing = await Listing.findByIdAndUpdate(
       id,
       { status: "approved" },
       { new: true }
     );
-    res.status(200).json("Approve success!");
+
+    // Kiểm tra bài đăng có tồn tại không
+    if (!listing) {
+      return res.status(404).json({ message: "Bài đăng không tồn tại." });
+    }
+
+    // Tạo thông báo
+    const notification = new Notification({
+      from: req.user.id, // ID của admin
+      to: listing.userRef, // ID của người dùng sở hữu bài đăng
+      content: `Bài đăng "${listing?.name}" của bạn đã được duyệt thành công!`,
+      type: "approval",
+      listingRef: id, // Tham chiếu đến bài đăng
+    });
+
+    // Lưu thông báo vào cơ sở dữ liệu
+    await notification.save();
+
+    // Trả về phản hồi thành công
+    res.status(200).json({ message: "Approve success!", listing });
   } catch (error) {
+    // Gọi middleware xử lý lỗi
     next(error);
   }
 };
 
-export const rejectListing = async (req, res) => {
+export const rejectListing = async (req, res, next) => {
   try {
     const { id } = req.params;
     const listing = await Listing.findByIdAndUpdate(
@@ -53,7 +76,15 @@ export const rejectListing = async (req, res) => {
       { status: "rejected" },
       { new: true }
     );
-    res.status(200).json("Reject success!");
+    const notification = new Notification({
+      from: req.user.id, // ID của admin
+      to: listing.userRef, // ID của người dùng sở hữu bài đăng
+      content: `Bài đăng "${listing?.name}" của bạn đã bị từ chối!`,
+      type: "rejection",
+      listingRef: id,
+    });
+    await notification.save();
+    res.status(200).json({ message: "Reject success!", listing });
   } catch (error) {
     next(error);
   }

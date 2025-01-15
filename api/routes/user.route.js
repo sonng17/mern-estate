@@ -6,6 +6,8 @@ import {
   getUser,
   getMyUserListings,
   getMyUserListing,
+  getMyUserNotifications,
+  MarkAsRead,
 } from "../controllers/user.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 
@@ -17,8 +19,9 @@ router.get("/get/:id", getUser);
 router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
 router.get("/mylistings/:id", verifyToken, getMyUserListings);
+router.get("/mynotifications/:id", verifyToken, getMyUserNotifications);
+router.put("/mark-as-read/:id", verifyToken, MarkAsRead);
 router.get("/mylisting/:id", verifyToken, getMyUserListing);
 router.get("/listings/:id", getUserListings);
-//Admin Router
 
 export default router;

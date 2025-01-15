@@ -2,6 +2,7 @@ import bcryptjs from "bcryptjs";
 import User from "../models/user.model.js";
 import { errorHandler } from "../utils/error.js";
 import Listing from "../models/listing.model.js";
+import Notification from "../models/notification.model.js";
 
 //Create controller for router
 export const test = (req, res, next) => {
@@ -73,12 +74,10 @@ export const getMyUserListing = async (req, res, next) => {
 
 export const getMyUserListings = async (req, res, next) => {
   const userId = req.params.id;
-
   // Kiểm tra nếu userId không tồn tại
   if (!userId) {
     return res.status(400).json({ message: "User ID is required." });
   }
-
   try {
     // Truy vấn danh sách theo userRef và status "approved"
     const listings = await Listing.find({
@@ -89,7 +88,7 @@ export const getMyUserListings = async (req, res, next) => {
     if (listings.length === 0) {
       return res
         .status(404)
-        .json({ message: "No listings found for this user." });
+        .json({ message: "No listings found for this user.", listings: [] });
     }
 
     // Phản hồi với danh sách tìm thấy
@@ -97,6 +96,50 @@ export const getMyUserListings = async (req, res, next) => {
   } catch (error) {
     // Truyền lỗi sang middleware xử lý lỗi
     next(error);
+  }
+};
+
+export const getMyUserNotifications = async (req, res, next) => {
+  const userId = req.params.id;
+  // Kiểm tra nếu userId không tồn tại
+  if (!userId) {
+    return res.status(400).json({ message: "User ID is required." });
+  }
+  try {
+    // Truy vấn danh sách thông báo theo userRef
+    const notifications = await Notification.find({
+      to: userId,
+    });
+
+    // Nếu không có danh sách nào được tìm thấy, trả về thông báo nhưng mã trạng thái vẫn là 200
+    if (notifications.length === 0) {
+      return res.status(200).json({
+        message: "No notifications found for this user.",
+        notifications: [],
+      });
+    }
+
+    // Phản hồi với danh sách thông báo tìm thấy
+    res.status(200).json(notifications);
+  } catch (error) {
+    // Truyền lỗi sang middleware xử lý lỗi
+    next(error);
+  }
+};
+
+export const MarkAsRead = async (req, res, next) => {
+  try {
+    const { id } = req.params; // ID của người dùng được truyền qua params
+    // Cập nhật tất cả thông báo có trường "to" === id, set status thành "read"
+    await Notification.updateMany(
+      { to: id, status: "unread" },
+      { $set: { status: "read" } }
+    );
+
+    res.status(200).json({ message: "All notifications marked as read." });
+  } catch (error) {
+    console.error("Error marking notifications as read:", error);
+    next(error); // Gửi lỗi tới middleware xử lý lỗi
   }
 };
 
