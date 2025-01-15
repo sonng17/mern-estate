@@ -35,6 +35,9 @@ export const updateListing = async (req, res, next) => {
     return next(errorHandler(401, "You can only update your own listings!"));
   }
   try {
+    // Thêm trường status = 'pending' vào req.body
+    req.body.status = "pending";
+    
     const updatedListing = await Listing.findByIdAndUpdate(
       req.params.id,
       req.body,
