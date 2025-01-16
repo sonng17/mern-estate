@@ -135,3 +135,27 @@ export const getListings = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getSameListings = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Lấy id bài đăng từ params
+
+    // Tìm bài đăng ban đầu theo id
+    const listing = await Listing.findById(id);
+
+    if (!listing) {
+      return res.status(404).json({ error: "Listing not found." });
+    }
+
+    // Tìm các bài đăng cùng district, ngoại trừ bài đăng ban đầu
+    const sameDistrictListings = await Listing.find({
+      districtRef: listing.districtRef,
+      status: "approved",
+      _id: { $ne: id }, // Loại trừ bài đăng ban đầu
+    });
+
+    res.status(200).json({ listings: sameDistrictListings });
+  } catch (error) {
+    next(error); // Truyền lỗi tới middleware xử lý lỗi
+  }
+};
