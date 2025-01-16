@@ -9,6 +9,7 @@ import {
   getPendingListings,
   getUsersAdmin,
   pendListing,
+  promoteUser,
   rejectListing,
 } from "../controllers/admin.controller.js";
 import { isAdmin } from "../utils/isAdmin.js";
@@ -26,6 +27,7 @@ router.put("/approveListing/:id", isAdmin, approveListing);
 router.put("/rejectListing/:id", isAdmin, rejectListing);
 router.put("/pendListing/:id", isAdmin, pendListing);
 router.delete("/deleteUser/:id", isAdmin, deleteUser);
+router.put("/promoteUser/:id", isAdmin, promoteUser);
 router.delete("/deleteListing/:id", isAdmin, deleteListing);
 
 export default router;

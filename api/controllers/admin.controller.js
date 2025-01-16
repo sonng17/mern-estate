@@ -5,7 +5,7 @@ import Listing from "../models/listing.model.js";
 import Notification from "../models/notification.model.js";
 
 //Admin controller
-export const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res, next) => {
   try {
     const users = await User.find();
     res.status(200).json(users);
@@ -14,7 +14,7 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getAllListings = async (req, res) => {
+export const getAllListings = async (req, res, next) => {
   try {
     const listings = await Listing.find();
     res.status(200).json(listings);
@@ -23,7 +23,7 @@ export const getAllListings = async (req, res) => {
   }
 };
 
-export const getPendingListings = async (req, res) => {
+export const getPendingListings = async (req, res, next) => {
   try {
     const listings = await Listing.find({ status: "pending" });
     res.status(200).json(listings);
@@ -90,7 +90,7 @@ export const rejectListing = async (req, res, next) => {
   }
 };
 
-export const pendListing = async (req, res) => {
+export const pendListing = async (req, res, next) => {
   try {
     const { id } = req.params;
     const listing = await Listing.findByIdAndUpdate(
@@ -99,6 +99,20 @@ export const pendListing = async (req, res) => {
       { new: true }
     );
     res.status(200).json("Pend success!");
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const promoteUser = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndUpdate(
+      id,
+      { role: "admin" },
+      { new: true }
+    );
+    res.status(200).json("Promote success!");
   } catch (error) {
     next(error);
   }
