@@ -70,21 +70,39 @@ export const approveListing = async (req, res, next) => {
 
 export const rejectListing = async (req, res, next) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Lấy id bài đăng từ params
+    const { message } = req.body; // Lấy lý do từ chối từ body
+
+    if (!message) {
+      return res.status(400).json({ error: "Lý do từ chối là bắt buộc." });
+    }
+
+    // Tìm và cập nhật trạng thái bài đăng
     const listing = await Listing.findByIdAndUpdate(
       id,
       { status: "rejected" },
       { new: true }
     );
+
+    if (!listing) {
+      return res.status(404).json({ error: "Bài đăng không tồn tại." });
+    }
+
+    // Tạo thông báo từ chối
     const notification = new Notification({
       from: req.user.id, // ID của admin
       to: listing.userRef, // ID của người dùng sở hữu bài đăng
-      content: `Bài đăng "${listing?.name}" của bạn đã bị từ chối!`,
+      content: `Bài đăng "${listing?.name}" của bạn đã bị từ chối. Lý do: ${message}`,
       type: "rejection",
       listingRef: id,
     });
+
+    // Lưu thông báo vào database
     await notification.save();
-    res.status(200).json({ message: "Reject success!", listing });
+
+    res
+      .status(200)
+      .json({ message: "Bài đăng đã bị từ chối thành công.", listing });
   } catch (error) {
     next(error);
   }
